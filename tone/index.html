@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+
+  <input type="button" value="Stop" id="stop">
+
+  <script>
+
+  var context = new AudioContext;
+  var oscillators = [];
+
+  for(var i = 0; i < 1; i ++){
+
+    var o = context.createOscillator();
+    o.frequency.value = 200;
+    o.connect(context.destination);
+    o.start(0);
+    oscillators.push(o);
+
+  }
+
+  var x = 0;
+  setInterval(function(){
+
+    var s = sawtoothWave(x, 300, 50);
+    var si = sinWave(x, 300, 1.5);
+    console.log(s);
+
+    oscillators[0].frequency.value = si;
+    /*oscillators[0].frequency.value = s;
+    oscillators[1].frequency.value = c;
+    oscillators[2].frequency.value = t;*/
+
+    x = x + .1;
+  }, 10);
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function sawtoothWave(x, frequency, amplitude){
+    return frequency + (x % 1) * amplitude;
+  }
+
+  function sinWave(x, frequency, amplitude){
+    return frequency + Math.sin(x) * amplitude;
+  }
+
+  document.getElementById("stop").addEventListener("click", function(){
+    oscillators.forEach(function(o){
+      o.stop(0);
+    })
+  })
+
+  </script>
+
+</body>
+</html>
