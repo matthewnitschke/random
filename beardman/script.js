@@ -77,11 +77,14 @@ function drawBounds(ctx){
 
 }
 
-function drawPoints(ctx, amount, length){
+function drawPoints(ctx, amount, minLength, maxLength){
   ctx.beginPath();
   for(var i = 0; i < amount; i ++){
     var pt = getPoint(shapes);
-    ctx.rect(pt[0], pt[1],1,length);
+
+    var length = rand(minLength, maxLength);
+
+    ctx.rect(pt[0], pt[1], 1, length);
   }
   ctx.stroke();
   console.log("done");
@@ -119,7 +122,8 @@ redrawButton.addEventListener('click', function(){
 
 function redraw(){
   var amt = document.getElementById('amount').value;
-  var length = document.getElementById('length').value;
+  var minLength = document.getElementById('minLength').value;
+  var maxLength = document.getElementById('maxLength').value;
 
 
   clearCanvas();
@@ -127,7 +131,7 @@ function redraw(){
   var img = document.getElementById("face");
   ctx.drawImage(img,0,0);
 
-  drawPoints(ctx, amt, length);
+  drawPoints(ctx, amt, minLength, maxLength);
 }
 
 function clearCanvas() {
