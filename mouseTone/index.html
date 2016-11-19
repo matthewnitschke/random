@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+
+  <style>
+    body, html, .screen{
+      width: 100%;
+      height: 100%;
+      margin:0;
+      box-sizing: border-box;
+    }
+
+    .screen{
+      border: solid 3px black;
+    }
+
+    .wave-type-container{
+      position: fixed;
+      border: solid 3px black;
+      padding: 1rem .5rem;
+
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wave-type-container">
+
+    <input type="radio" value="sin" name="soundType" checked> Sin <br>
+    <input type="radio" value="square" name="soundType"> Square<br>
+    <input type="radio" value="sawtooth" name="soundType"> Sawtooth<br>
+    <input type="radio" value="triangle" name="soundType"> Triangle
+
+  </div>
+
+  <div class="screen">
+
+  </div>
+
+
+
+  <script>
+
+    var context = new AudioContext;
+    var oscillator = context.createOscillator();
+    var gain = context.createGain();
+
+    oscillator.frequency.value = 200;
+    oscillator.connect(gain);
+    gain.connect(context.destination)
+    oscillator.start(0);
+
+    document.addEventListener("mousemove", function(){
+      var x = event.clientX;
+      var y = event.clientY;
+
+      gain.gain.value = y * .001;
+      oscillator.frequency.value = x;
+    });
+
+    document.querySelectorAll(".wave-type-container input").forEach(function(inp){
+      inp.addEventListener("click", radioClick);
+    })
+
+    function radioClick(){
+      var radios = document.getElementsByName('soundType');
+
+      for (var i = 0, length = radios.length; i < length; i++) {
+          if (radios[i].checked) {
+              oscillator.type = radios[i].value;
+              break;
+          }
+      }
+    }
+  </script>
+
+</body>
+</html>
